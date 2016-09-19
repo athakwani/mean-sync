@@ -14,7 +14,7 @@
   dependencies: 
   [
     {
-      name: "apt-packages",
+      name: "mean-dependencies",
       cmd:
       '''
         apt-get -y install curl
@@ -23,7 +23,7 @@
       '''
     },
     {
-      name: "npm-install",
+      name: "nodejs-dependencies",
       cmd:
       '''
         npm install -g bower gulp
@@ -33,7 +33,7 @@
       watch: "package.json"
     },
     {
-      name: "bower-install",
+      name: "bower-dependencies",
       cmd:
       '''
         cd $REPO_ROOT
@@ -42,7 +42,7 @@
       watch: "bower.json"
     },
     {
-      name: "cloud-9-sdk",
+      name: "cloud-9-sdk-dependencies",
       cmd:
       '''    
         apt-get install -y build-essential g++ curl libssl-dev apache2-utils libxml2-dev sshfs python2.7 python2.7-dev
@@ -53,7 +53,7 @@
       '''
     },
     {
-      name: "dev-packages",
+      name: "devenv-dependencies",
       cmd:
       '''
         apt-get -y install curl sudo inotify-tools openssh-server
