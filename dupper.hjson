@@ -9,7 +9,8 @@
   ],  
   env:
   [
-    "NODE_ENV=development"
+    "NODE_ENV=development",
+    "PORT=3000"
   ],
   dependencies: 
   [
@@ -65,16 +66,22 @@
     deploy: [{
       server:
       '''
-         service mongodb start
-         cd $REPO_ROOT
-         PORT=3000 gulp
+         service mongodb status > /dev/null 2>&1
+         if [[ $? -ne 0 ]]
+         then
+            service mongodb start
+         fi
+        
+         PORT=3000 start-stop-daemon -b --start --quiet --oknodo \
+         --pidfile /var/run/gulp.pid -d $REPO_ROOT --exec /usr/bin/node \
+         -- server.js
          exit_code=$?
          _export exit_code
       '''
     },{
       client:
       '''
-        [ $exit_code -eq 0 ] && open http://$SERVER_IP:8080/
+        [ $exit_code -eq 0 ] && open http://$SERVER_IP:3000/
       '''    
     }],
     devenv: [{
