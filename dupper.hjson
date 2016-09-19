@@ -14,7 +14,7 @@
   dependencies: 
   [
     {
-      name: "mean-dependencies",
+      name: "linux-dependencies",
       cmd:
       '''
         apt-get -y install curl
