@@ -75,13 +75,19 @@
          PORT=3000 start-stop-daemon -b --start --quiet --oknodo \
          --pidfile /var/run/gulp.pid -d $REPO_ROOT --exec /usr/bin/node \
          -- server.js
-         exit_code=$?
-         _export exit_code
       '''
     },{
       client:
       '''
-        [ $exit_code -eq 0 ] && open http://$SERVER_IP:3000/
+        echo "Waiting for server to start ....."
+        while [ 1 ]; do
+          wget -q --retry-connrefused --waitretry=1 --read-timeout=20 \
+          --timeout=15 -t 0 --continue $SERVER_IP:3000 >/dev/null 2>&1
+          if [ $? = 0 ]; then break; fi;
+          sleep 2s;
+        done;
+        echo "Server started ....."
+        open http://$SERVER_IP:3000/
       '''    
     }],
     devenv: [{
