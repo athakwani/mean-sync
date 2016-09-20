@@ -90,7 +90,7 @@
         open http://$SERVER_IP:3000/
       '''    
     }],
-    devenv: [{
+    sync: [{
         server:
         '''
           if [ ! -f $HOME/.ssh/devenv ]
