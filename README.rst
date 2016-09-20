@@ -1,7 +1,7 @@
 This dupper template repository is for mean stack `linnovate/mean <https://github.com/linnovate/mean>`_ + Sync development environment (devenv).
 
-Mean stack
-==========
+Mean stack + Sync
+=================
 
 This template install `mean stack <https://github.com/linnovate/mean>`_ and `Sync devenv <https://github.com/athakwani/sync>`_. You can start mean stack devenv with below commands:
 
