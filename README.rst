@@ -1,9 +1,9 @@
-This dupper template repository is for mean stack `linnovate/mean <https://github.com/linnovate/mean>`_ + Sync development environment (devenv).
+This dupper template repository is for `Mean Stack <https://github.com/linnovate/mean>`_ + Sync development environment (devenv).
 
 Mean stack + Sync
 =================
 
-This template install `mean stack <https://github.com/linnovate/mean>`_ and `Sync devenv <https://github.com/athakwani/sync>`_. You can start mean stack devenv with below commands:
+This template install `Mean Stack <https://github.com/linnovate/mean>`_ and `Sync <https://github.com/athakwani/sync>`_. You can start mean stack with sync using below commands:
 
 .. code-block:: bash
 
