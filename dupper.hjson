@@ -51,40 +51,86 @@
     }     
   ],
   commands: {
-    deploy: [{
+    start: [{
       server:
       '''
+         # Check Mogodb service and start if not running
          service mongodb status > /dev/null 2>&1
          if [[ $? -ne 0 ]]
          then
             service mongodb start
          fi
-        
-         PORT=3000 start-stop-daemon -b --start --quiet --oknodo \
-         --pidfile /var/run/gulp.pid -d $REPO_ROOT --exec /usr/bin/node \
-         -- server.js
+
+         # Start Gulp as Daemon
+         PORT=3000 daemon --name="gulp" --output=gulp.out -F /var/run/gulp.pid -D $REPO_ROOT -X /usr/bin/gulp        
+
+         echo "MEAN stack ..... [ STARTING ]"
+         
+         # Check for Server start
+         timeout 20 bash -c -- "while true; do wget -q --retry-connrefused \
+         --waitretry=1 --read-timeout=20 --timeout=15 -t 0 --continue 159.203.234.168:3000 >/dev/null 2>&1; \
+         if [ $? = 0 ]; then break; fi; sleep 2s; done"
+
+         # Report status
+         _exit_code=$?   
+         if [[ $_exit_code -eq 0 ]]
+         then
+             echo -e "MEAN stack ..... [ STARTED ]"
+         else
+             echo -e "MEAN stack ..... [ TIMEOUT ]"
+         fi
+
+         # Pass Status to client
+         _export _exit_code
       '''
     },{
       client:
       '''
-        echo "Waiting for server to start ....."
-        while [ 1 ]; do
-          wget -q --retry-connrefused --waitretry=1 --read-timeout=20 \
-          --timeout=15 -t 0 --continue $SERVER_IP:3000 >/dev/null 2>&1
-          if [ $? = 0 ]; then break; fi;
-          sleep 2s;
-        done;
-        echo "Server started ....."
-
-        os="$(uname -s)"
-        if [[ $os == "Darwin" ]]; then
-            open http://$SERVER_IP:3000/
-        fi        
-      '''    
+         # Open browser on Mac if server started successfully.
+         if [[ $_exit_code -eq 0 ]]
+         then
+             os="$(uname -s)"
+             if [[ $os == "Darwin" ]]; then
+                 echo -e "Opening Browser"
+                 open http://$SERVER_IP:3000/
+             fi        
+         fi
+      '''
     }],
+    stop: [{
+      server:
+      '''
+          # Get group ID of Gulp daemon process
+          pgid=$(ps --no-headers -o pgid $(cat /var/run/gulp.pid))
+          pgid=$(echo $pgid | tr -d '[[:space:]]')
+
+          # Kill all group processes
+          pkill -1 -g $pgid
+
+          echo "MEAN stack ..... [ STOPPING ]"
+
+          # Check for termination and report status
+          timeout 5 bash -c -- "while true; do [ -f /var/run/gulp.pid ]; \
+          if [ $? -eq 0 ]; then break; fi; sleep 2s; done"
+          _exit_code=$?
+
+          if [[ $_exit_code -eq 0 ]]
+          then
+              echo -e "MEAN stack ..... [ STOPPED ]"
+          else
+              echo -e "MEAN stack ..... [ TIMEOUT ]"
+          fi
+      '''
+    }],    
+    logs: [{
+      server:
+      '''
+          [ -f $REPO_ROOT/gulp.out ] && tail -n 1000 $REPO_ROOT/gulp.out
+      '''
+    }],     
     sync: [{
-        server:
-        '''
+      server:
+      '''
           if [ ! -f $HOME/.ssh/devenv ]
           then
             mkdir -p $HOME/.ssh
@@ -103,10 +149,10 @@
           then
             service ssh start
           fi
-        '''
-      },{
-        client:
-        '''
+      '''
+    },{
+      client:
+      '''
           _verbose=0
           _path=""
           
@@ -143,7 +189,7 @@
           
           mkdir -p $_path
           dev sync $([[ $_verbose -eq 1 ]] && echo "-v") -i $HOME/.ssh/devenv root@$SERVER_IP:2222:$REPO_ROOT $_path
-        '''
+      '''
     }]  
   }
 }

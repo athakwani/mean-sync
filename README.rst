@@ -9,32 +9,30 @@ This template install `Mean Stack <https://github.com/linnovate/mean>`_ and `Syn
 
   dupper dup --inotify-max-watches=30000 --template-from=https://github.com/athakwani/mean-sync https://github.com/linnovate/mean
   dupper exec mean sync DIR
-  
-Dependencies
-============
-
-* mongodb
-* nodejs
-* npm
-* bower
-* gulp
-* npm packages
-* bower packages
-* curl
-* sudo
-* inotify-tools
-* openssh-server
-* `gut <https://github.com/tillberg/gut>`_
     
 Commands
 ========
 
-* deploy - Start mean stack
+* start - Starts mean stack
 
 .. code-block:: bash
 
     Usage:
-    dupper exec mean deploy
+    dupper exec mean start
+
+* stop - Stops mean stack
+
+.. code-block:: bash
+
+    Usage:
+    dupper exec mean stop
+
+* logs - Display gulp output
+
+.. code-block:: bash
+
+    Usage:
+    dupper exec mean logs
 
 * sync - Sync mean stack code
     
