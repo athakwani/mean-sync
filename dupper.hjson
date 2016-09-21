@@ -1,11 +1,11 @@
 {
   ports: 
   [
-    "35729:35729",
-    "3000:3000",
-    "9418:9418",
-    "2222:22",
-    "5858:5858"
+    "35729:35729", // live reload
+    "3000:3000",   // mean stack
+    "9418:9418",   // gut daemon
+    "2222:22",     // ssh
+    "8080:8080"    // node-inspector
   ],  
   env:
   [
@@ -27,7 +27,7 @@
       name: "nodejs-dependencies",
       cmd:
       '''
-        npm install -g bower gulp
+        npm install -g bower gulp node-inspector
         cd $REPO_ROOT
         npm install
       ''',
@@ -135,6 +135,20 @@
             # Start debugger in background detached from terminal
             [ -f /var/run/gulp.pid ]
             exit_code=$?
+    
+            if [[ $exit_code -ne 0 ]]
+            then
+                echo "MEAN stack not running, start using below command:"
+                echo "Usage:"
+                echo "    dupper exec $REPO_NAME start"
+                exit 1
+            fi
+            
+            # Start debugger in background detached from terminal
+            daemon --name="node-inspector" --output=node-inspector.out -F /var/run/node-inspector.pid -D $REPO_ROOT -X /usr/bin/node \
+            /usr/bin/node-inspector -- --web-port=8080 --web-host=0.0.0.0
+            
+            exit_code="$?"
             _export exit_code
         '''
       },{
