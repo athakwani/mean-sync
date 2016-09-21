@@ -69,7 +69,7 @@
          
          # Check for Server start
          timeout 20 bash -c -- "while true; do wget -q --retry-connrefused \
-         --waitretry=1 --read-timeout=20 --timeout=15 -t 0 --continue 159.203.234.168:3000 >/dev/null 2>&1; \
+         --waitretry=1 --read-timeout=20 --timeout=15 -t 0 --continue localhost:3000 >/dev/null 2>&1; \
          if [ $? = 0 ]; then break; fi; sleep 2s; done"
 
          # Report status
