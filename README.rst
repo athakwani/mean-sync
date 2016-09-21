@@ -27,6 +27,13 @@ Commands
     Usage:
     dupper exec mean stop
 
+* debug - Start node debugger
+
+.. code-block:: bash
+
+    Usage:
+    dupper exec mean debug
+
 * logs - Display gulp output
 
 .. code-block:: bash

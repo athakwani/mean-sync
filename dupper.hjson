@@ -135,6 +135,7 @@
             # Start debugger in background detached from terminal
             [ -f /var/run/gulp.pid ]
             exit_code=$?
+            _export exit_code
     
             if [[ $exit_code -ne 0 ]]
             then
