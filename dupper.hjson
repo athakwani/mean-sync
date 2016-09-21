@@ -4,7 +4,8 @@
     "35729:35729",
     "3000:3000",
     "9418:9418",
-    "2222:22"
+    "2222:22",
+    "5858:5858"
   ],  
   env:
   [
@@ -128,6 +129,23 @@
           [ -f $REPO_ROOT/gulp.out ] && tail -n 1000 $REPO_ROOT/gulp.out
       '''
     }],     
+    debug: [{
+        server:
+        '''
+            # Start debugger in background detached from terminal
+            [ -f /var/run/gulp.pid ]
+            exit_code=$?
+            _export exit_code
+        '''
+      },{
+        client:
+        '''
+          os="$(uname -s)"
+          if [[ $os == "Darwin" ]]; then
+            [ $exit_code -eq 0 ] && open http://$SERVER_IP:8080/
+          fi        
+        '''
+    }],
     sync: [{
       server:
       '''
