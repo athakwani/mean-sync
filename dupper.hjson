@@ -18,8 +18,8 @@
       name: "linux-dependencies",
       cmd:
       '''
-        apt-get -y install curl wget
-        curl -sL  https://deb.nodesource.com/setup_4.x | bash -
+        apt-get -y install curl wget libfontconfig
+        curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
         apt-get -y install mongodb nodejs daemon
       '''
     },
