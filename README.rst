@@ -7,7 +7,7 @@ This template install `Mean Stack <https://github.com/linnovate/mean>`_ and `Syn
 
 .. code-block:: bash
 
-  dupper dup --inotify-max-watches=30000 --template-from=https://github.com/athakwani/mean-sync https://github.com/linnovate/mean
+  dupper dup --template-from=https://github.com/athakwani/mean-sync https://github.com/linnovate/mean
   dupper exec mean sync DIR
     
 Commands
